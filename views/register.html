@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p>name is: {{name}}</p>
+
+<html>
+	<head>
+		<title>Register</title>
+	</head>
+
+	<body>
+		<h2>New User</h2>
+
+		<form action="/register" method="post">
+			<fieldset>
+				<p>
+					<label for="email">Email</label>
+					<input type="text" id="email" name="email" value="" maxlength="300" />
+				</p>
+				<p>
+					<label for="password">Password</label>
+					<input type="password" id="password" name="password" value="" maxlength="300" />
+				</p>
+				<p>
+					<input type="hidden" name="form_token" value="{{form_token}}" />
+					<input type="submit" value="Register" />
+				</p>
+			</fieldset>
+		</form>
+	</body>
+</html>
+
+
+
+{% endblock %}
