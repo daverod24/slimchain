@@ -79,22 +79,16 @@
 
 		//return user obj w/ hashed password if submission is valid
 	    public static function validuser($emailIn, $passwordIn, $tokenIn) {
-			
-			/*** check the form token is valid ***/
-			if( $tokenIn != $_SESSION['form_token']) {
-				$message = 'Invalid form submission';
-			}
-			elseif(!isset($emailIn, $passwordIn, $tokenIn)) {
-				$message = 'Please enter a valid email and password';
-			}
-			elseif (strlen( $emailIn) > 300 || strlen($emailIn) < 4) {
-				$message = 'Incorrect Length for email';
-			}
-			elseif (!filter_var($emailIn, FILTER_VALIDATE_EMAIL)) {
-			    $message = "Invalid email address";
-			}
-			elseif (strlen( $passwordIn) > 300 || strlen($passwordIn) < 10) {
-				$message = 'Incorrect Length for Password';
+
+	    	$validToken = Validation::validToken($tokenIn);
+	    	$validEmailLength = Validation::validLength($emailIn, 300, 10);
+	    	$validEmail = Validation::validEmail($emailIn);
+	    	$validPasswordLength = Validation::validLength($passwordIn, 300, 10);
+
+
+			if( !$validToken || !$validEmailLength ||!$validEmail ||!$validPasswordLength) {
+				$message = "invalid. set the message with the validation class. figure out scoping";
+				echo $message;
 			}
 			else {
 				$email = filter_var($emailIn, FILTER_SANITIZE_STRING);

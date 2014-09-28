@@ -1,9 +1,13 @@
 <?php
+
 	$app->get('/test', function () use($twig) {
-		$test = User::getby('id','19');
-		print $test->email;
 		
+		blockchainAPI::ticker();
+
 	});
+
+
+
 	$app->get('/register', function () use($twig) {
 		$_SESSION['form_token'] = md5( uniqid('auth', true) );
 		echo $twig->render('register.html', array('form_token' => $_SESSION['form_token']));
