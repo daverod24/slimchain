@@ -26,36 +26,46 @@
 	    function login(){
 			try {
 				global $db;
-		        $stmt = $db->prepare("SELECT id, email, password FROM users WHERE email = :email AND password = :password");
+		        $stmt = $db->prepare("SELECT * FROM users WHERE email = :email AND password = :password");
 		        $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
 		        $stmt->bindParam(':password', $this->password, PDO::PARAM_STR, 64);
 		        $stmt->execute();
 		        /*** check for a result ***/
-		        $id = $stmt->fetchColumn();
-
-		        if($id == false) {
+		        $result=($stmt->fetch());
+		        if($result == false) {
 		            $message ='Login Failed';
 		        }
 		        else {
+		        	$message = 'You are now logged in';
+
+		        	//initialize session user
 		            $_SESSION['user'] = $this;
-		            $message = 'You are now logged in';
+		            foreach ($result as $key => $value) {
+						$index = print_r($key, true);
+						$_SESSION['user']->$index = $value;
+					}
+					$walletPass = hash( 'sha256', $this->password.SALT );
+					$_SESSION['connection'] = new merchantCall($walletPass);
 		        }
+		        echo $message;
 			}
 			catch(Exception $e) {
+				echo $e ->getMessage();
 				$message = 'Database error';
 			}
-
-			echo $message;
+			print $result['guid'];
 	    }
+
+	    /*function logout(){}*/
 
 	    // registers calling User obj to db
 		function register() {
 			global $db;
+			/*$request = new merchantCall();*/
 
-			$walletPass = password_hash( $this->password.SALT , PASSWORD_DEFAULT);
-			$request = "https://blockchain.info/api/v2/create_wallet?api_code=802b764f-aacd-4fed-aa84-af7fb7700432&password=".$walletPass;
-			$response = json_decode(file_get_contents($request));
-			$this->guid = $response->{'guid'};
+			$walletPass = hash( 'sha256', $this->password.SALT );
+			$this->guid = merchantCall::newWallet($walletPass);
+
 			try {
 				$stmt = $db->prepare("INSERT INTO users (email, password, guid ) VALUES (:email, :password, :guid )");
 				/*** bind the parameters, execute the prepared statement ***/
@@ -64,10 +74,10 @@
 				$stmt->bindParam(':guid', $this->guid, PDO::PARAM_STR);
 				$stmt->execute();
 				$message = 'New user added';
+				$this->login();
 			}
 			catch(Exception $e) {
 				if( $e->getCode() == 23000) {
-					echo $e ->getMessage();
 					$message = 'Duplicate entry';
 				}
 				else {
@@ -79,22 +89,16 @@
 
 		//return user obj w/ hashed password if submission is valid
 	    public static function validuser($emailIn, $passwordIn, $tokenIn) {
-			
-			/*** check the form token is valid ***/
-			if( $tokenIn != $_SESSION['form_token']) {
-				$message = 'Invalid form submission';
-			}
-			elseif(!isset($emailIn, $passwordIn, $tokenIn)) {
-				$message = 'Please enter a valid email and password';
-			}
-			elseif (strlen( $emailIn) > 300 || strlen($emailIn) < 4) {
-				$message = 'Incorrect Length for email';
-			}
-			elseif (!filter_var($emailIn, FILTER_VALIDATE_EMAIL)) {
-			    $message = "Invalid email address";
-			}
-			elseif (strlen( $passwordIn) > 300 || strlen($passwordIn) < 10) {
-				$message = 'Incorrect Length for Password';
+
+	    	$validToken = Validation::validToken($tokenIn);
+	    	$validEmailLength = Validation::validLength($emailIn, 300, 10);
+	    	$validEmail = Validation::validEmail($emailIn);
+	    	$validPasswordLength = Validation::validLength($passwordIn, 300, 10);
+
+
+			if( !$validToken || !$validEmailLength ||!$validEmail ||!$validPasswordLength) {
+				$message = "invalid. set the message with the validation class. figure out scoping";
+				echo $message;
 			}
 			else {
 				$email = filter_var($emailIn, FILTER_SANITIZE_STRING);
