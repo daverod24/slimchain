@@ -1,8 +1,0 @@
-{
-    "require": {
-        "slim/slim": "2.*",
-        "twig/twig": "*",
-        "slim/views": "*",
-        "illuminate/database": "*"
-    }
-}
