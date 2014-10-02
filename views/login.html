@@ -1,29 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-
-<html>
-<head>
-	<title>Login</title>
-</head>
-
-<body>
-	<h2>Login</h2>
 	<form action="login" method="post">
-		<fieldset>
-			<p>
-				<label for="email">Email</label>
-				<input type="text" id="email" name="email" value="" maxlength="300" />
-			</p>
-			<p>
-				<label for="password">Password</label>
-				<input type="password" id="password" name="password" value="" maxlength="300" />
-			</p>
-			<p>
-				<input type="hidden" name="form_token" value="{{form_token}}" />
-				<input type="submit" value="Login" />
-			</p>
-		</fieldset>
+		<label for="email">Email</label>
+		<input type="email" id="email" name="email" value="" maxlength="300" />
+	
+		<label for="password">Password</label>
+		<input type="password" id="password" name="password" value="" maxlength="300" />
+
+		<input type="hidden" name="form_token" value="{{form_token}}" />
+		<input type="submit" value="Login" />
 	</form>
-</body>
-</html>
+	<a href="/register">Register</a>
 {% endblock %}

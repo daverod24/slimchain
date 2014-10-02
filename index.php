@@ -1,13 +1,18 @@
 <?php
+	
+	$db = new PDO("mysql:host = localhost; dbname=slimchain", "root", "root");
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	require 'config/config.php';
+	require 'lib/validation.php';
+	require 'lib/baseX.php';
+	require 'models/User.php';
+	require 'lib/request.php';
+	require 'models/merchant.php';
+	require 'lib/unitConversion.php';
+	require 'vendor/autoload.php';
 	session_start();
 
-	$db = new PDO("mysql:host = localhost; dbname=blockchain", "root", "root");
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	include 'config/config.php';
-	require 'models/User.php';
-	require 'vendor/autoload.php';
-
-$app = new \Slim\Slim(array(
+	$app = new \Slim\Slim(array(
 		'view' => new \Slim\Views\Twig()
 		));
 
@@ -24,10 +29,10 @@ $app = new \Slim\Slim(array(
 
 	$loader = new Twig_Loader_Filesystem('views');
 	$twig = new Twig_Environment($loader);
-	
+/*don't require these till $app and $twig are defined*/
 	require 'route/user.php';
-	require 'route/api.php';
+	require 'route/app.php';
 
-		$app->run();
+	$app->run();
 	
 ?>

@@ -1,9 +1,10 @@
 <?php
+	
 	$app->get('/test', function () use($twig) {
-		$test = User::getby('id','19');
-		print $test->email;
-		
-	});
+		$decimal = baseX::baseXdecode("16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM","123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
+		$hex = baseX::base16encode($decimal);
+	});	
+
 	$app->get('/register', function () use($twig) {
 		$_SESSION['form_token'] = md5( uniqid('auth', true) );
 		echo $twig->render('register.html', array('form_token' => $_SESSION['form_token']));
@@ -25,4 +26,12 @@
 		$valid->login();
 
 	});
+
+
+	$app->get('/+', function () use($twig) {
+		 $app->redirect('/login');
+
+	});
+
+
 ?>

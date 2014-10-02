@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <title>{% block title %}{% endblock %} - SlimChain</title>
+        {% endblock %}
+    </head>
+    <body>
+    	<header></header>
+        <main>{% block content %}{% endblock %}</main>
+        <footer>
+            {% block footer %}
+                &copy; Copyright 2014 by <a href="http://domain.invalid/">Katie</a>.
+            {% endblock %}
+        </footer>
+    </body>
+</html>
