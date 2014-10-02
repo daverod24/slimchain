@@ -4,7 +4,10 @@
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	require 'config/config.php';
 	require 'lib/validation.php';
+<<<<<<< HEAD
 	require 'lib/baseX.php';
+=======
+>>>>>>> 6815327146bef7bf0d5356c9268d34cbb4591c2b
 	require 'models/User.php';
 	require 'lib/request.php';
 	require 'models/merchant.php';

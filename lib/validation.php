@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 	class Validation {
 
 		public static function base16decode($input){
@@ -39,6 +40,29 @@
 			$remainder = $input - ($result *( pow(16, $n)));
 
 			echo "result:" . $result;
+=======
+	class Validation
+	{
+		public static function nextDigit($input){
+			//base 16 alphabet
+			$base16 = "0123456789ABCDEF";
+			//find place value (n) of digit to be evaluated
+			$n = 0;
+			echo "input:".$input;
+			while(pow(16, $n)<$input){
+				$n++;
+			}
+			$n--;
+			echo "n:".$n;
+
+			//divide input by base to the nth power to find digit in nth place
+			$result = floor($input/pow(16, $n));
+
+			//calculate remainder
+			$remainder = $input -($result*(pow(16, $n)));
+
+			echo "result:".$result;
+>>>>>>> 6815327146bef7bf0d5356c9268d34cbb4591c2b
 
 			//translate base10 digit to desired base alphabet digit by mapping to basealphabet string with base10 index
 			$output = substr($base16, $result, 1);
@@ -80,7 +104,11 @@
 
 
 
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 6815327146bef7bf0d5356c9268d34cbb4591c2b
 
 		public static function validAddress($address){
 			$output = base_convert( $address , 58 , 64 );

@@ -1,8 +1,12 @@
 <?php
 	
 	$app->get('/test', function () use($twig) {
+<<<<<<< HEAD
 		$decimal = baseX::baseXdecode("16UwLL9Risc3QfPqBUvKofHmBQ7wMtjvM","123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz");
 		$hex = baseX::base16encode($decimal);
+=======
+		Validation::base16encode(3299);
+>>>>>>> 6815327146bef7bf0d5356c9268d34cbb4591c2b
 	});	
 
 	$app->get('/register', function () use($twig) {
