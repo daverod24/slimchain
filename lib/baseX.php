@@ -89,6 +89,8 @@
 
 		public static function base16encode($input){
 			echo "Encoding the following to base16".$input."\n\n\n\n\n\n";
+			//base 16 alphabet
+			$base16 = "0123456789ABCDEF";
 			$output = '';
 			$remainder = $input;
 			$n=0;
@@ -100,25 +102,28 @@
 			/*$n = bcsub($n, 1);*/
 			echo "The position (n) is:" . $n."\n";
 
-
 			//keep calcing next digit until there is no remainder left
 			while ($remainder>0) {
-				$next = baseX::nextDigit($remainder,$n);
-				//append next digit to output and set new remainder
-				$output=$output.$next["result"];
-				$remainder = $next["remainder"];
+				echo "The remainder to convert to base 16 is: ".$input."\n";
+
+				//divide input by base to the nth power to find digit in nth place
+				$result = baseX::bcfloor(bcdiv($input, bcpow(16, $n)));
+				echo "The remainder/(16 ^ nth power) and then rounded down yields this result: ".$result."\n";
+				//calculate remainder
+				$remainder = bcsub($input,(bcmul($result ,(bcpow(16, $n)))));
+				echo "The new remainder is".$remainder."\n";
+
+				//translate base10 digit to desired base alphabet digit by mapping to basealphabet string with base10 index
+				$nextDigit= substr($base16, $result, 1);
+				echo "The result mapped to a base16 digit is: ".$nextDigit."\n\n";
+
+				//append next digit to output and set new remainder and n
+				$output=$output.$nextDigit;
 				$n--;
 			}
 			echo "FINAL OUTPUT: ".$output;
 		}
 
-
-		public static function base58encode($input){
-			$base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
-			$div = floor($input / 58);
-
-		}
 
 	}
 ?>
